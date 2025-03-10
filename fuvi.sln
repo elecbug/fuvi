@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuVi", "FuVi\FuVi.csproj", "{A62C1930-9B66-468C-9932-04C36995E7B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuViTest", "FuViTest\FuViTest.csproj", "{6D613580-5290-4FF9-944B-528142538F4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A62C1930-9B66-468C-9932-04C36995E7B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A62C1930-9B66-468C-9932-04C36995E7B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A62C1930-9B66-468C-9932-04C36995E7B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D613580-5290-4FF9-944B-528142538F4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D613580-5290-4FF9-944B-528142538F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D613580-5290-4FF9-944B-528142538F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D613580-5290-4FF9-944B-528142538F4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
