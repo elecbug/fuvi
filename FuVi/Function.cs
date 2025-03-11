@@ -22,7 +22,7 @@
                 }
                 catch (DivideByZeroException)
                 {
-                    FuviPoint point = new FuviPoint(0, null);
+                    FuviPoint point = new FuviPoint(i, null);
                     points.Add(point);
                 }
             }

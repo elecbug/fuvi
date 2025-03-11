@@ -7,8 +7,8 @@
         
         public FuviPoint()
         {
-            X = 0;
-            Y = 0;
+            X = null;
+            Y = null;
         }
         public FuviPoint(decimal? x, decimal? y)
         {
