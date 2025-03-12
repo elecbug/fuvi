@@ -7,42 +7,48 @@ namespace FuVi
     {
         private int _padding;
 
-        public FuviPoint[] Samples { get; private set; }
+        public FuviPoint[] Points { get; private set; }
         public Size Size { get; set; }
         public Axis Axis { get; set; }
         public int Padding { get => _padding; set => _padding = Math.Max(value, 0); }
 
-        private Workspace()
+        public Workspace()
         {
             Size = new Size(300, 300);
-            Samples = [];
+            Axis = new Axis() 
+            {
+                StartX = -10,
+                StartY = -10,
+                EndX = 10,
+                EndY = 10,
+            };
+            Padding = 10;
+            Points = [];
         }
-
-        public static Workspace CreateEmptyWorkspcae()
+        public Workspace(FuviPoint[] points) : base()
         {
-            Workspace workspace = new Workspace();
-            workspace.Samples = [];
-         
-            return workspace;
-        }
-        public static Workspace CreateBy(FuviPoint[] samples)
-        {
-            Workspace workspace = new Workspace();
-            workspace.Samples = samples;
-
-            return workspace;
+            Points = points;
         }
 
         public Svg Draw()
         {
-            return new Svg(GenerateSvg());
+            return new Svg(CreateSvg());
         }
 
-        private string GenerateSvg()
+        private string CreateSvg()
         {
             XNamespace svgNs = "http://www.w3.org/2000/svg";
+            XElement svg = CreateBaseline(svgNs);
 
-            XElement svg = new XElement(svgNs + "svg",
+            svg.Add(CreatePolylines(svgNs));
+            svg.Add(CreateZeroPoint(svgNs));
+
+            return svg.ToString();
+        }
+
+        private XElement CreateBaseline(XNamespace svgNs)
+        {
+            return new XElement(svgNs + "svg",
                 new XAttribute(XNamespace.Xmlns + "svg", svgNs),
                 new XAttribute("width", Size.Width),
                 new XAttribute("height", Size.Height),
@@ -71,13 +77,8 @@ namespace FuVi
                     new XAttribute("stroke", "black"),
                     new XAttribute("stroke-width", "2"))
             );
-
-            svg.Add(ConvertPointsToSvgFormat(svgNs));
-
-            return svg.ToString();
         }
-
-        private IEnumerable<XElement> ConvertPointsToSvgFormat(XNamespace svgNs)
+        private IEnumerable<XElement> CreatePolylines(XNamespace svgNs)
         {
             List<XElement> elements = new List<XElement>();
             List<string> currentPolylinePoints = new List<string>();
@@ -88,7 +89,7 @@ namespace FuVi
             decimal svgHeight = Size.Height - 2 * Padding;
 
             /// Draw graph polylines
-            foreach (var point in Samples)
+            foreach (var point in Points)
             {
                 if (point.X == null || point.Y == null)
                 {
@@ -124,6 +125,18 @@ namespace FuVi
                     new XAttribute("stroke-width", "2"),
                     new XAttribute("points", string.Join(" ", currentPolylinePoints))));
             }
+
+            return elements;
+        }
+        private IEnumerable<XElement> CreateZeroPoint(XNamespace svgNs)
+        {
+            List<XElement> elements = new List<XElement>();
+            List<string> currentPolylinePoints = new List<string>();
+
+            decimal axisWidth = Axis.EndX - Axis.StartX;
+            decimal axisHeight = Axis.EndY - Axis.StartY;
+            decimal svgWidth = Size.Width - 2 * Padding;
+            decimal svgHeight = Size.Height - 2 * Padding;
 
             /// Draw zero point
             if (Axis.StartX <= 0 && Axis.EndX >= 0 && Axis.StartY <= 0 && Axis.EndY >= 0)

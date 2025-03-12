@@ -2,26 +2,28 @@
 using System.Drawing;
 
 Function[] funcs =
-            {
-                new Function(x => x * x),
-                new Function(x => 1 / x),
-                new Function(x => (decimal)Math.Sin((double)x)),
-                new Function(x => (decimal)Math.Pow(2, (double)x)),
-            };
+{
+    new Function(x => x * x),
+    new Function(x => 1 / x),
+    new Function(x => (decimal)Math.Sin((double)x)),
+    new Function(x => (decimal)Math.Pow(2, (double)x)),
+};
 
 for (int i = 0; i < funcs.Length; i++)
 {
     FuviPoint[] points = funcs[i].Sampling(-10, 10, 0.001m);
 
-    Workspace workspace = Workspace.CreateBy(points);
-    workspace.Size = new Size(2000, 2000);
-    workspace.Padding = 100;
-    workspace.Axis = new Axis
+    Workspace workspace = new Workspace(points)
     {
-        StartX = -10,
-        StartY = -10,
-        EndX = 10,
-        EndY = 10,
+        Size = new Size(2000, 2000),
+        Padding = 100,
+        Axis = new Axis
+        {
+            StartX = -10,
+            StartY = -10,
+            EndX = 10,
+            EndY = 10,
+        }
     };
 
     Svg svg = workspace.Draw();
