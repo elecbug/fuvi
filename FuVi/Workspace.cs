@@ -7,7 +7,7 @@ namespace FuVi
     {
         private int _padding;
 
-        public FuviPoint[] Points { get; private set; }
+        public Point[] Points { get; private set; }
         public Size Size { get; set; }
         public Axis Axis { get; set; }
         public int Padding { get => _padding; set => _padding = Math.Max(value, 0); }
@@ -25,7 +25,7 @@ namespace FuVi
             Padding = 10;
             Points = [];
         }
-        public Workspace(FuviPoint[] points) : base()
+        public Workspace(Point[] points) : base()
         {
             Points = points;
         }
@@ -78,10 +78,10 @@ namespace FuVi
                     new XAttribute("stroke-width", "2"))
             );
         }
-        private IEnumerable<XElement> CreatePolylines(XNamespace svgNs)
+        private List<XElement> CreatePolylines(XNamespace svgNs)
         {
-            List<XElement> elements = new List<XElement>();
-            List<string> currentPolylinePoints = new List<string>();
+            List<XElement> elements = [];
+            List<string> currentPolylinePoints = [];
 
             decimal axisWidth = Axis.EndX - Axis.StartX;
             decimal axisHeight = Axis.EndY - Axis.StartY;
@@ -128,10 +128,10 @@ namespace FuVi
 
             return elements;
         }
-        private IEnumerable<XElement> CreateZeroPoint(XNamespace svgNs)
+        private List<XElement> CreateZeroPoint(XNamespace svgNs)
         {
-            List<XElement> elements = new List<XElement>();
-            List<string> currentPolylinePoints = new List<string>();
+            List<XElement> elements = [];
+            List<string> currentPolylinePoints = [];
 
             decimal axisWidth = Axis.EndX - Axis.StartX;
             decimal axisHeight = Axis.EndY - Axis.StartY;

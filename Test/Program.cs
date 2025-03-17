@@ -11,7 +11,7 @@ Function[] funcs =
 
 for (int i = 0; i < funcs.Length; i++)
 {
-    FuviPoint[] points = funcs[i].Sampling(-10, 10, 0.001m);
+    FuVi.Point[] points = funcs[i].Sampling(-10, 10, 0.001m);
 
     Workspace workspace = new Workspace(points)
     {

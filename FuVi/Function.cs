@@ -2,32 +2,32 @@
 {
     public class Function
     {
-        private Func<decimal, decimal> _func;
+        private readonly Func<decimal, decimal> _func;
 
         public Function(Func<decimal, decimal> func)
         {
             _func = func;
         }
 
-        public FuviPoint[] Sampling(decimal start, decimal end, decimal interval)
+        public Point[] Sampling(decimal start, decimal end, decimal interval)
         {
-            List<FuviPoint> points = new List<FuviPoint>();
+            List<Point> points = [];
 
             for (decimal i = start; i <= end; i += interval)
             {
                 try
                 {
-                    FuviPoint point = new FuviPoint(i, _func(i));
+                    Point point = new Point(i, _func(i));
                     points.Add(point);
                 }
                 catch (DivideByZeroException)
                 {
-                    FuviPoint point = new FuviPoint(i, null);
+                    Point point = new Point(i, null);
                     points.Add(point);
                 }
             }
 
-            return points.ToArray();
+            return [.. points];
         }
     }
 }

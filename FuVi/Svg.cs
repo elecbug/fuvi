@@ -2,7 +2,7 @@
 {
     public class Svg
     {
-        private string _svg;
+        private readonly string _svg;
 
         internal Svg(string svg)
         {
@@ -11,10 +11,8 @@
         
         public void Save(string path)
         {
-            using (StreamWriter writer = new StreamWriter(path))
-            {
-                writer.Write(_svg);
-            }
+            using StreamWriter writer = new StreamWriter(path);
+            writer.Write(_svg);
         }
     }
 }
