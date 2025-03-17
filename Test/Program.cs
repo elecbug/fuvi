@@ -9,24 +9,24 @@ Function[] funcs =
     new Function(x => (decimal)Math.Pow(2, (double)x)),
 };
 
+Workspace workspace = new Workspace()
+{
+    Size = new Size(2000, 2000),
+    Padding = 100,
+    Axis = new Axis
+    {
+        StartX = -10,
+        StartY = -10,
+        EndX = 10,
+        EndY = 10,
+    }
+};
+
 for (int i = 0; i < funcs.Length; i++)
 {
-    FuVi.Point[] points = funcs[i].Sampling(-10, 10, 0.001m);
-
-    Workspace workspace = new Workspace(points)
-    {
-        Size = new Size(2000, 2000),
-        Padding = 100,
-        Axis = new Axis
-        {
-            StartX = -10,
-            StartY = -10,
-            EndX = 10,
-            EndY = 10,
-        }
-    };
-
-    Svg svg = workspace.Draw();
-
-    svg.Save(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"function_{i}.svg"));
+    GraphPoints points = funcs[i].Sampling(-10, 10, 0.001m);
+    workspace.Points.Add(points);
 }
+
+Svg svg = workspace.Draw();
+svg.Save(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"function.svg"));

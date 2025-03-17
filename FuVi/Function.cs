@@ -9,7 +9,7 @@
             _func = func;
         }
 
-        public Point[] Sampling(decimal start, decimal end, decimal interval)
+        public GraphPoints Sampling(decimal start, decimal end, decimal interval)
         {
             List<Point> points = [];
 
@@ -27,7 +27,7 @@
                 }
             }
 
-            return [.. points];
+            return new GraphPoints(points);
         }
     }
 }

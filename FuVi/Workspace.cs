@@ -7,10 +7,10 @@ namespace FuVi
     {
         private int _padding;
 
-        public Point[] Points { get; private set; }
+        public List<GraphPoints> Points { get; private set; }
+        public int Padding { get => _padding; set => _padding = Math.Max(value, 0); }
         public Size Size { get; set; }
         public Axis Axis { get; set; }
-        public int Padding { get => _padding; set => _padding = Math.Max(value, 0); }
 
         public Workspace()
         {
@@ -25,9 +25,9 @@ namespace FuVi
             Padding = 10;
             Points = [];
         }
-        public Workspace(Point[] points) : base()
+        public Workspace(params GraphPoints[] points) : base()
         {
-            Points = points;
+            Points = points.ToList();
         }
 
         public Svg Draw()
@@ -40,7 +40,11 @@ namespace FuVi
             XNamespace svgNs = "http://www.w3.org/2000/svg";
             XElement svg = CreateBaseline(svgNs);
 
-            svg.Add(CreatePolylines(svgNs));
+            foreach (GraphPoints pls in Points)
+            {
+                svg.Add(CreatePolylines(svgNs, pls));
+            }
+
             svg.Add(CreateZeroPoint(svgNs));
 
             return svg.ToString();
@@ -78,7 +82,7 @@ namespace FuVi
                     new XAttribute("stroke-width", "2"))
             );
         }
-        private List<XElement> CreatePolylines(XNamespace svgNs)
+        private List<XElement> CreatePolylines(XNamespace svgNs, GraphPoints pls)
         {
             List<XElement> elements = [];
             List<string> currentPolylinePoints = [];
@@ -89,7 +93,7 @@ namespace FuVi
             decimal svgHeight = Size.Height - 2 * Padding;
 
             /// Draw graph polylines
-            foreach (var point in Points)
+            foreach (var point in pls)
             {
                 if (point.X == null || point.Y == null)
                 {
@@ -97,9 +101,10 @@ namespace FuVi
                     {
                         elements.Add(new XElement(svgNs + "polyline",
                             new XAttribute("fill", "none"),
-                            new XAttribute("stroke", "blue"),
+                            new XAttribute("stroke", pls.Color),
                             new XAttribute("stroke-width", "2"),
                             new XAttribute("points", string.Join(" ", currentPolylinePoints))));
+
                         currentPolylinePoints.Clear();
                     }
                     continue;
@@ -121,7 +126,7 @@ namespace FuVi
             {
                 elements.Add(new XElement(svgNs + "polyline",
                     new XAttribute("fill", "none"),
-                    new XAttribute("stroke", "blue"),
+                    new XAttribute("stroke", pls.Color),
                     new XAttribute("stroke-width", "2"),
                     new XAttribute("points", string.Join(" ", currentPolylinePoints))));
             }
@@ -138,6 +143,8 @@ namespace FuVi
             decimal svgWidth = Size.Width - 2 * Padding;
             decimal svgHeight = Size.Height - 2 * Padding;
 
+            decimal zeroPointSize = 2.5m;
+
             /// Draw zero point
             if (Axis.StartX <= 0 && Axis.EndX >= 0 && Axis.StartY <= 0 && Axis.EndY >= 0)
             {
@@ -145,16 +152,28 @@ namespace FuVi
                 decimal zeroY = (svgHeight + 2 * Padding) - (((0 - Axis.StartY) / axisHeight) * svgHeight + Padding);
 
                 elements.Add(new XElement(svgNs + "line",
-                    new XAttribute("x1", zeroX - 5), new XAttribute("y1", zeroY),
-                    new XAttribute("x2", zeroX + 5), new XAttribute("y2", zeroY),
-                    new XAttribute("stroke", "red"),
-                    new XAttribute("stroke-width", "2")));
+                    new XAttribute("x1", Padding), new XAttribute("y1", zeroY),
+                    new XAttribute("x2", Size.Width - Padding), new XAttribute("y2", zeroY),
+                    new XAttribute("stroke", "gray"),
+                    new XAttribute("stroke-width", "1")));
 
                 elements.Add(new XElement(svgNs + "line",
-                    new XAttribute("x1", zeroX), new XAttribute("y1", zeroY - 5),
-                    new XAttribute("x2", zeroX), new XAttribute("y2", zeroY + 5),
-                    new XAttribute("stroke", "red"),
-                    new XAttribute("stroke-width", "2")));
+                    new XAttribute("x1", zeroX), new XAttribute("y1", Padding),
+                    new XAttribute("x2", zeroX), new XAttribute("y2", Size.Height - Padding),
+                    new XAttribute("stroke", "gray"),
+                    new XAttribute("stroke-width", "1")));
+
+                elements.Add(new XElement(svgNs + "line",
+                    new XAttribute("x1", zeroX - zeroPointSize), new XAttribute("y1", zeroY - zeroPointSize),
+                    new XAttribute("x2", zeroX + zeroPointSize), new XAttribute("y2", zeroY + zeroPointSize),
+                    new XAttribute("stroke", "black"),
+                    new XAttribute("stroke-width", "1")));
+
+                elements.Add(new XElement(svgNs + "line",
+                    new XAttribute("x1", zeroX + zeroPointSize), new XAttribute("y1", zeroY - zeroPointSize),
+                    new XAttribute("x2", zeroX - zeroPointSize), new XAttribute("y2", zeroY + zeroPointSize),
+                    new XAttribute("stroke", "black"),
+                    new XAttribute("stroke-width", "1")));
             }
 
             return elements;
