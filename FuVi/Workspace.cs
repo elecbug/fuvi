@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using FuVi.File;
+using FuVi.Graph;
 using System.Xml.Linq;
 
 namespace FuVi
@@ -8,7 +9,7 @@ namespace FuVi
         private int _padding;
 
         public List<GraphPoints> Points { get; private set; }
-        public int Padding { get => _padding; set => _padding = Math.Max(value, 0); }
+        public int Padding { get => _padding; set => _padding = value >= 0 ? value : throw new InvalidDataException($"Workspace.Padding must over than zero: {value}"); }
         public Size Size { get; set; }
         public Axis Axis { get; set; }
 
@@ -32,6 +33,23 @@ namespace FuVi
 
         public Svg Draw()
         {
+            if (Axis.StartX >= Axis.EndX)
+            {
+                throw new InvalidDataException($"Workspace.Axis's X must be valid: {Axis.StartX}~{Axis.EndX}");
+            }
+            if (Axis.StartY >= Axis.EndY)
+            {
+                throw new InvalidDataException($"Workspace.Axis's Y must be valid: {Axis.StartY}~{Axis.EndY}");
+            }
+            if (Size.Width <= 0)
+            {
+                throw new InvalidDataException($"Workspace.Size's Width must over than zero: {Size.Width}");
+            }
+            if (Size.Height <= 0)
+            {
+                throw new InvalidDataException($"Workspace.Size's Height must over than zero: {Size.Height}");
+            }
+
             return new Svg(CreateSvg());
         }
 
@@ -39,12 +57,14 @@ namespace FuVi
         {
             XNamespace svgNs = "http://www.w3.org/2000/svg";
             XElement svg = CreateBaseline(svgNs);
+            List<XElement>[] polylines = new List<XElement>[Points.Count];
 
-            foreach (GraphPoints pls in Points)
+            Parallel.For(0, polylines.Length, i =>
             {
-                svg.Add(CreatePolylines(svgNs, pls));
-            }
+                polylines[i] = CreatePolylines(svgNs, Points[i]);
+            });
 
+            svg.Add(polylines);
             svg.Add(CreateZeroPoint(svgNs));
 
             return svg.ToString();

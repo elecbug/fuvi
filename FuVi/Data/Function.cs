@@ -1,4 +1,6 @@
-﻿namespace FuVi
+﻿using FuVi.Graph;
+
+namespace FuVi.Data
 {
     public class Function
     {

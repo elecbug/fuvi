@@ -1,10 +1,10 @@
-﻿namespace FuVi
+﻿namespace FuVi.Data
 {
     public struct Point
     {
         public decimal? X { get; set; }
         public decimal? Y { get; set; }
-        
+
         public Point()
         {
             X = null;

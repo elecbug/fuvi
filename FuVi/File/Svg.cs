@@ -1,4 +1,4 @@
-﻿namespace FuVi
+﻿namespace FuVi.File
 {
     public class Svg
     {
@@ -8,7 +8,7 @@
         {
             _svg = svg;
         }
-        
+
         public void Save(string path)
         {
             using StreamWriter writer = new StreamWriter(path);

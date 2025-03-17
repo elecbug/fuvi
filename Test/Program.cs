@@ -1,10 +1,16 @@
 ﻿using FuVi;
-using System.Drawing;
+using FuVi.Data;
+using FuVi.File;
+using FuVi.Graph;
 
 Function[] funcs =
 {
     new Function(x => x * x),
+    new Function(x => x * x * x),
+    new Function(x => x * x * x * x),
     new Function(x => 1 / x),
+    new Function(x => 1 / x / x),
+    new Function(x => x * x / x),
     new Function(x => (decimal)Math.Sin((double)x)),
     new Function(x => (decimal)Math.Pow(2, (double)x)),
 };
@@ -16,8 +22,8 @@ Workspace workspace = new Workspace()
     Axis = new Axis
     {
         StartX = -10,
-        StartY = -10,
         EndX = 10,
+        StartY = -10,
         EndY = 10,
     }
 };
