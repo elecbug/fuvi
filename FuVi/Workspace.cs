@@ -9,9 +9,17 @@ namespace FuVi
         private int _padding;
 
         public List<GraphPoints> Points { get; private set; }
-        public int Padding { get => _padding; set => _padding = value >= 0 ? value : throw new InvalidDataException($"Workspace.Padding must over than zero: {value}"); }
         public Size Size { get; set; }
         public Axis Axis { get; set; }
+        public int Padding 
+        {
+            get => _padding; 
+            set 
+            {
+                _padding = value >= 0 ? value :
+                    throw new InvalidDataException($"Workspace.Padding must over than zero: {value}"); 
+            }
+        }
 
         public Workspace()
         {

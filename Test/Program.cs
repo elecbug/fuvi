@@ -2,23 +2,19 @@
 using FuVi.Data;
 using FuVi.File;
 using FuVi.Graph;
+using Math = FuVi.Data.Math;
 
 Function[] funcs =
 {
-    new Function(x => x * x),
-    new Function(x => x * x * x),
-    new Function(x => x * x * x * x),
+    new Function(x => (x - 3) * (x - 5) * (x + 7)),
     new Function(x => 1 / x),
-    new Function(x => 1 / x / x),
-    new Function(x => x * x / x),
-    new Function(x => (decimal)Math.Sin((double)x)),
-    new Function(x => (decimal)Math.Pow(2, (double)x)),
+    new Function(x => Math.Sin(x)),
 };
 
 Workspace workspace = new Workspace()
 {
     Size = new Size(2000, 2000),
-    Padding = 100,
+    Padding = 10,
     Axis = new Axis
     {
         StartX = -10,
